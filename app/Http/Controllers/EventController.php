@@ -4,10 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreEventRequest;
 
 class EventController extends Controller
 {
-    public function store(Request $request)
+    public function store(StoreEventRequest $request)
     {
         $eventData = $request->validate([
             'name' => 'required|string|max:60',
