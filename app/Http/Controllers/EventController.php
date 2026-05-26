@@ -4,11 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 use App\Http\Requests\StoreEventRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 
 class EventController extends Controller
 {
-    public function store(StoreEventRequest $request)
+    public function store(StoreEventRequest $request):  RedirectResponse
     {
         $eventData = $request->validate([
             'name' => 'required|string|max:60',
@@ -23,8 +27,22 @@ class EventController extends Controller
         return redirect()->route('events.index');
     }
 
-    public function index()
-    {
-        return 'Lista de eventos';
-    }
+    public function index():View
+{
+    $events = Event::all();
+
+    return view('events.index', compact('events'));
+}
+public function update(Request $request, Event $event): JsonResponse
+{
+    $event->update($request->all());
+
+    return response()->json($event, 200);
+}
+public function destroy(Event $event): Response
+{
+    $event->delete();
+
+    return response()->noContent();
+}
 }
